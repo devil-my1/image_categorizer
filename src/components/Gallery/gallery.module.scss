@@ -1,0 +1,45 @@
+.gallery {
+    padding: 20px;
+
+    input[type="text"] {
+        width: 100%;
+        padding: 8px;
+        margin-bottom: 16px;
+        border-radius: 5px;
+        color: rgb(50, 71, 128);
+        border: 1px solid #ddd;
+    }
+}
+
+.gallery_grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 16px;
+}
+
+.image_card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 8px;
+    text-align: center;
+
+    img {
+        width: 100%;
+        height: auto;
+        border-radius: 8px;
+    }
+}
+
+.tags {
+    margin-top: 8px;
+}
+
+.tag {
+    display: inline-block;
+    background-color: #0073e6;
+    color: white;
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin: 2px;
+    font-size: 0.8em;
+}
