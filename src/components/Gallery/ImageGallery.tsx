@@ -9,9 +9,11 @@ import { X } from "lucide-react"
 
 export default function ImageGallery() {
 	const [searchTag, setSearchTag] = useState("")
-	const [showModal, setShowModal] = useState(false)
+	const [showTagModal, setShowTagModal] = useState(false)
+	const [showImageModal, setShowImageModal] = useState(false)
+	const [selectedImage, setSelectedImage] = useState<Image | null>(null)
 	const { data: images, isLoading, isSuccess } = useImages()
-	const modalRef = useRef(null) // Reference for modal content
+	const modalRef = useRef<HTMLDivElement | null>(null) // Reference for modal content
 
 	const allTags = Array.from(new Set(images?.flatMap(img => img.labels) || []))
 
@@ -23,18 +25,19 @@ export default function ImageGallery() {
 			)
 		: images
 
-	// Close modal if clicking outside of the modal content
+	// Close modals if clicking outside of the modal content
 	useEffect(() => {
 		const handleClickOutside = (event: MouseEvent) => {
 			if (
 				modalRef.current &&
-				!(modalRef.current as Node).contains(event.target as Node)
+				!modalRef.current.contains(event.target as Node)
 			) {
-				setShowModal(false)
+				setShowTagModal(false)
+				setShowImageModal(false)
 			}
 		}
 
-		if (showModal) {
+		if (showTagModal || showImageModal) {
 			document.addEventListener("mousedown", handleClickOutside)
 		} else {
 			document.removeEventListener("mousedown", handleClickOutside)
@@ -43,12 +46,17 @@ export default function ImageGallery() {
 		return () => {
 			document.removeEventListener("mousedown", handleClickOutside)
 		}
-	}, [showModal])
+	}, [showTagModal, showImageModal])
+
+	const handleImageClick = (img: Image) => {
+		setSelectedImage(img)
+		setShowImageModal(true)
+	}
 
 	return (
 		<div className={styles.gallery}>
 			<button
-				onClick={() => setShowModal(true)}
+				onClick={() => setShowTagModal(true)}
 				className={styles.filterButton}
 			>
 				Filter Tags
@@ -60,7 +68,7 @@ export default function ImageGallery() {
 			>
 				Clear
 			</button>
-			{showModal && (
+			{showTagModal && (
 				<div className={styles.modal}>
 					<div
 						className={styles.modalContent}
@@ -74,7 +82,7 @@ export default function ImageGallery() {
 									className={tag === searchTag ? styles.activeTag : ""}
 									onClick={() => {
 										setSearchTag(tag)
-										setShowModal(false)
+										setShowTagModal(false)
 									}}
 								>
 									{tag}
@@ -82,7 +90,27 @@ export default function ImageGallery() {
 							))}
 						</div>
 						<button
-							onClick={() => setShowModal(false)}
+							onClick={() => setShowTagModal(false)}
+							className={styles.closeModal}
+						>
+							<X />
+						</button>
+					</div>
+				</div>
+			)}
+			{showImageModal && selectedImage && (
+				<div className={styles.modal}>
+					<div
+						className={styles.modalContent}
+						ref={modalRef}
+					>
+						<img
+							src={selectedImage.imageUrl}
+							alt='Selected'
+							className={styles.modalImage}
+						/>
+						<button
+							onClick={() => setShowImageModal(false)}
 							className={styles.closeModal}
 						>
 							<X />
@@ -107,6 +135,7 @@ export default function ImageGallery() {
 						<div
 							key={index}
 							className={styles.image_card}
+							onClick={() => handleImageClick(img)}
 						>
 							<img
 								loading='lazy'
