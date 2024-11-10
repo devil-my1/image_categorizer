@@ -1,14 +1,18 @@
 import type { NextConfig } from "next"
 
 const nextConfig: NextConfig = {
-	async rewrites() {
-		return [
-			{
-				source: "/(.*)",
-				destination:
-					"https://n1ibzhgix2.execute-api.ap-northeast-1.amazonaws.com"
+	experimental: {
+		turbo: {
+			rules: {
+				"*.scss": {
+					loaders: ["sass-loader"],
+					as: "*.css"
+				}
 			}
-		]
+		}
+	},
+	sassOptions: {
+		silenceDeprecations: ["legacy-js-api"]
 	}
 }
 

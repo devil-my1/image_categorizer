@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState, useRef, useEffect } from "react"
-import { Image } from "@/types/image.type"
+import { Image as ImageType } from "@/types/image.type"
 import styles from "./gallery.module.scss"
 import { useImages } from "@/hooks/useImages"
 import Loader from "@/components/ui/Loader"
@@ -11,7 +11,7 @@ export default function ImageGallery() {
 	const [searchTag, setSearchTag] = useState("")
 	const [showTagModal, setShowTagModal] = useState(false)
 	const [showImageModal, setShowImageModal] = useState(false)
-	const [selectedImage, setSelectedImage] = useState<Image | null>(null)
+	const [selectedImage, setSelectedImage] = useState<ImageType | null>(null)
 	const { data: images, isLoading, isSuccess } = useImages()
 	const modalRef = useRef<HTMLDivElement | null>(null) // Reference for modal content
 
@@ -48,7 +48,7 @@ export default function ImageGallery() {
 		}
 	}, [showTagModal, showImageModal])
 
-	const handleImageClick = (img: Image) => {
+	const handleImageClick = (img: ImageType) => {
 		setSelectedImage(img)
 		setShowImageModal(true)
 	}

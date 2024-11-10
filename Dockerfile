@@ -1,17 +1,19 @@
-FROM node:latest
+FROM node:alpine
 
 WORKDIR /app
 
-COPY package*.json ./
+RUN apk -U -i upgrade &&  apk add -i nano
 
-RUN npm install -g yarn
+COPY package*.json ./
 
 RUN yarn
 
 COPY . .
 
+RUN yarn
+
 RUN yarn run build
 
 EXPOSE 3000
 
-CMD ["npx", "serve", "-s", "build"]
+ENTRYPOINT [ "yarn", "run", "start" ]
