@@ -1,8 +1,7 @@
 import axios from "axios"
 import { Image } from "@/types/image.type"
 
-axios.defaults.baseURL =
-	"https://ikiu54bife.execute-api.ap-northeast-1.amazonaws.com/dev"
+axios.defaults.baseURL = process.env.BASE_API_URL
 
 class ImageService {
 	async getImages() {
